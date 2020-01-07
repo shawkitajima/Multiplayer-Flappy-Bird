@@ -9,7 +9,8 @@ let score = 0;
 
 // listens for space and makes bird jump
 document.addEventListener('keydown', function(evt) {
-    if (evt.which === 65) {
+    if (evt.which === 32) {
+        evt.preventDefault();
         bird.vy -= 2;
     }
 })
@@ -31,7 +32,7 @@ const bird = {
 };
 
 const bottomPipe = {
-    x: 900,
+    x: 1200,
     y: Math.floor(Math.random() * (900 - 400 + 1) + 300),
     vx: 4,
     draw: function() {
@@ -41,7 +42,7 @@ const bottomPipe = {
 }
 
 const topPipe = {
-    x: 900,
+    x: 1200,
     y: bottomPipe.y - gap,
     vx: 4,
     draw: function() {
@@ -66,8 +67,8 @@ function draw() {
     bird.y += bird.vy;
     // Let's generate a new set of pipes and add to the score
     if (bottomPipe.x <= -100) {
-        bottomPipe.x = 900;
-        topPipe.x = 900;
+        bottomPipe.x = 1200;
+        topPipe.x = 1200;
         bottomPipe.y = Math.floor(Math.random() * (900 - 400 + 1) + 300);
         topPipe.y = bottomPipe.y - gap;
         score++;
