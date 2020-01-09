@@ -1,7 +1,12 @@
 const io = require('socket.io')();
 
 io.on('connection', function(socket) {
-    console.log('socket connected!');
+    socket.on('up', function() {
+        io.emit('moveUp');
+    });
+    socket.on('down', function() {
+        io.emit('moveDown');
+    });
 });
 
 

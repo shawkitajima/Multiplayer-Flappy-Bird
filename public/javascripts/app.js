@@ -2,21 +2,36 @@ const socket = io();
 const canvas = document.getElementById('game-board');
 const ctx = canvas.getContext('2d')
 
-// y direction velocity increaser
 const grav = 0.05;
 const gap = 125;
 const pipeStart = 1500;
+let pipeSpeed = 10;
 let score = 0;
 
 
-// listens for space and makes bird jump
+
+
+// listens for space and sends socket
 document.addEventListener('keydown', function(evt) {
     if (evt.which === 32) {
         evt.preventDefault();
-        bird.vy -= 2;
+        socket.emit('up');
+    }
+    if (evt.which === 13) {
+        evt.preventDefault();
+        socket.emit('down');
     }
 })
-    
+  
+socket.on('moveUp', function() {
+    bird.vy -= 2;
+});
+
+socket.on('moveDown', function() {
+    bird.vy += 2;
+});
+
+
 const bird = {
     x: 250,
     y: 100,
@@ -36,7 +51,7 @@ const bird = {
 const bottomPipe = {
     x: pipeStart,
     y: Math.floor(Math.random() * (900 - 400 + 1) + 300),
-    vx: 4,
+    vx: pipeSpeed,
     id: 'bot',
     draw: function() {
         ctx.fillStyle = 'green';
@@ -47,7 +62,7 @@ const bottomPipe = {
 const topPipe = {
     x: pipeStart,
     y: bottomPipe.y - gap,
-    vx: 4,
+    vx: pipeSpeed,
     id: 'top',
     draw: function() {
         ctx.fillStyle = 'green';
@@ -76,6 +91,7 @@ function draw() {
         bottomPipe.y = Math.floor(Math.random() * (900 - 400 + 1) + 300);
         topPipe.y = bottomPipe.y - gap;
         score++;
+        if (!score % 10) pipeSpeed *= 0.1
         document.getElementById('score').innerHTML = `Score: ${score}`
     }
 
@@ -117,6 +133,7 @@ function checkCollision(bird, pipe) {
     let dy=distY-rect.h/2;
     return (dx*dx+dy*dy<=(bird.radius*bird.radius));
 }
+
 
 init()
 
