@@ -91,7 +91,10 @@ function draw() {
         bottomPipe.y = Math.floor(Math.random() * (900 - 400 + 1) + 300);
         topPipe.y = bottomPipe.y - gap;
         score++;
-        if (!score % 10) pipeSpeed *= 0.1
+        if (score % 10 === 0) {
+            bottomPipe.vx = bottomPipe.vx * 1.1;
+            topPipe.vx = topPipe.vx * 1.1;
+        }
         document.getElementById('score').innerHTML = `Score: ${score}`
     }
 
